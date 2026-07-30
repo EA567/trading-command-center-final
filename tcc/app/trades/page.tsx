@@ -13,26 +13,39 @@ import { TradeModal } from "@/components/trades/TradeModal";
 import { Trade } from "@/types";
 
 export default function TradesContent() {
-  const { loading, accounts, visibleTrades, addTrade, updateTrade, deleteTrade } = useAppStore();
+  const { loading, accounts, visibleTrades, addTrade, updateTrade, deleteTrade } =
+    useAppStore();
+
   const { pushToast } = useToast();
   const searchParams = useSearchParams();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Trade | undefined>(undefined);
-  const [confirmDelete, setConfirmDelete] = useState<{ id: string; label: string } | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{
+    id: string;
+    label: string;
+  } | null>(null);
 
   useEffect(() => {
-    if (searchParams.get("add") === "1") setModalOpen(true);
+    if (searchParams.get("add") === "1") {
+      setModalOpen(true);
+    }
   }, [searchParams]);
 
-  if (loading) return <PageLoading variant="table" />;
+  if (loading) {
+    return <PageLoading variant="table" />;
+  }
 
   return (
     <div>
       <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-50">Trades</h1>
-          <p className="text-sm text-zinc-500 mt-1">Your professional trade journal</p>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-50">
+            Trades
+          </h1>
+          <p className="text-sm text-zinc-500 mt-1">
+            Your professional trade journal
+          </p>
         </div>
 
         <PrimaryButton
@@ -53,11 +66,13 @@ export default function TradesContent() {
           setEditing(undefined);
           setModalOpen(true);
         }}
-        onEdit={(t) => {
-          setEditing(t);
+        onEdit={(trade) => {
+          setEditing(trade);
           setModalOpen(true);
         }}
-        onDelete={(id, label) => setConfirmDelete({ id, label })}
+        onDelete={(id, label) => {
+          setConfirmDelete({ id, label });
+        }}
       />
 
       {modalOpen && (
@@ -65,14 +80,15 @@ export default function TradesContent() {
           accounts={accounts}
           initial={editing}
           onClose={() => setModalOpen(false)}
-          onSubmit={(t) => {
+          onSubmit={(trade) => {
             if (editing) {
-              updateTrade(editing.id, t);
-              pushToast(`${t.direction} ${t.pair} updated`);
+              updateTrade(editing.id, trade);
+              pushToast(`${trade.direction} ${trade.pair} updated`);
             } else {
-              addTrade(t);
-              pushToast(`${t.direction} ${t.pair} logged`);
+              addTrade(trade);
+              pushToast(`${trade.direction} ${trade.pair} logged`);
             }
+
             setModalOpen(false);
           }}
         />
