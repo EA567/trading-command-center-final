@@ -16,6 +16,7 @@ export function createClient() {
         get(name: string) {
           return cookieStore.get(name)?.value;
         },
+
         set(name: string, value: string, options: any) {
           try {
             cookieStore.set({ name, value, ...options });
@@ -23,7 +24,8 @@ export function createClient() {
             // called from a Server Component - safe to ignore with middleware refresh
           }
         },
-        remove(name: string, options) {
+
+        remove(name: string, options: any) {
           try {
             cookieStore.set({ name, value: "", ...options });
           } catch {
