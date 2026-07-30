@@ -12,10 +12,11 @@ import { TradeTable } from "@/components/trades/TradeTable";
 import { TradeModal } from "@/components/trades/TradeModal";
 import { Trade } from "@/types";
 
-export default function TradesPage() {
+export default function TradesContent() {
   const { loading, accounts, visibleTrades, addTrade, updateTrade, deleteTrade } = useAppStore();
   const { pushToast } = useToast();
   const searchParams = useSearchParams();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Trade | undefined>(undefined);
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; label: string } | null>(null);
@@ -33,14 +34,29 @@ export default function TradesPage() {
           <h1 className="text-2xl font-bold tracking-tight text-zinc-50">Trades</h1>
           <p className="text-sm text-zinc-500 mt-1">Your professional trade journal</p>
         </div>
-        <PrimaryButton icon={Plus} onClick={() => { setEditing(undefined); setModalOpen(true); }}>Log Trade</PrimaryButton>
+
+        <PrimaryButton
+          icon={Plus}
+          onClick={() => {
+            setEditing(undefined);
+            setModalOpen(true);
+          }}
+        >
+          Log Trade
+        </PrimaryButton>
       </div>
 
       <TradeTable
         trades={visibleTrades}
         accounts={accounts}
-        onAdd={() => { setEditing(undefined); setModalOpen(true); }}
-        onEdit={(t) => { setEditing(t); setModalOpen(true); }}
+        onAdd={() => {
+          setEditing(undefined);
+          setModalOpen(true);
+        }}
+        onEdit={(t) => {
+          setEditing(t);
+          setModalOpen(true);
+        }}
         onDelete={(id, label) => setConfirmDelete({ id, label })}
       />
 
